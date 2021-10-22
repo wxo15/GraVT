@@ -1,13 +1,6 @@
 package com.example.gravt;
 
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,14 +11,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.gravt.databinding.ActivityMainBinding;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.Viewport;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
