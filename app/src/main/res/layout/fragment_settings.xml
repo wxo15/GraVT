@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/edit_inactivity_timer"
         android:layout_width="110dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="number"
@@ -34,7 +34,7 @@
     <EditText
         android:id="@+id/edit_high_threshold"
         android:layout_width="110dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="number"
@@ -51,7 +51,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
-        android:text="High Threshold"
+        android:text="Impact Threshold"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -59,9 +59,9 @@
     <Switch
         android:id="@+id/send_emergency_contact_switch"
         android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="28dp"
+        android:layout_height="48dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="20dp"
         android:text="Send to Emergency Contact"
         android:textSize="20sp"
@@ -72,7 +72,7 @@
     <EditText
         android:id="@+id/edit_low_threshold"
         android:layout_width="110dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="number"
@@ -89,7 +89,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
-        android:text="Low Threshold"
+        android:text="Fall Threshold"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/send_emergency_contact_switch" />

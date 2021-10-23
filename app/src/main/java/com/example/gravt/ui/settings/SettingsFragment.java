@@ -42,7 +42,7 @@ public class SettingsFragment extends Fragment {
         SharedPreferences settings = this.getActivity().getSharedPreferences("settings", 0);
         binding.sendEmergencyContactSwitch.setChecked(settings.getBoolean("send_emergency_contact", false));
         binding.editHighThreshold.setText(Integer.toString(settings.getInt("high_thres", 30)));
-        binding.editLowThreshold.setText(Integer.toString(settings.getInt("low_thres", 5)));
+        binding.editLowThreshold.setText(Integer.toString(settings.getInt("low_thres", 2)));
         binding.editInactivityTimer.setText(Integer.toString(settings.getInt("inactivity_timer", 10)));
     }
 
