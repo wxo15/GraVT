@@ -8,10 +8,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,7 +34,10 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
+    // items on dashboard
     TextView txt_acc, txt_acc_curr;
+    CheckBox fall_checkbox, impact_checkbox;
+    ProgressBar inactivity_progress_bar;
 
     // txt output variables
     private double acc_curr_val;
@@ -49,6 +53,13 @@ public class DashboardFragment extends Fragment {
     LineGraphSeries<DataPoint> high_thres_series = new LineGraphSeries<>(new DataPoint[] {});
     Viewport viewport;
     GraphView graph;
+
+    // fall detection algorithm variable
+    private int stage_cooldown = 300;
+    private int low_trigger = 0;
+    private int high_trigger = 0;
+    private long inactivity_start_time = 0;
+    private boolean all_triggered = false;
 
     // sensor variables
     private SensorManager mSensorManager;
@@ -86,6 +97,11 @@ public class DashboardFragment extends Fragment {
                 series.resetData(dataPoints.toArray(new DataPoint[0]));
             }
 
+            // Detection algorithm
+            detectFall();
+            detectImpact();
+            detectInactivity();
+
             // reset axis and background color
             viewport.setMinX(Math.max(0,num_datapoints - 500));
             viewport.setMaxX(num_datapoints);
@@ -113,6 +129,12 @@ public class DashboardFragment extends Fragment {
         // import text values on dashboard
         txt_acc = root.findViewById(R.id.txt_acc);
         txt_acc_curr = root.findViewById(R.id.txt_acc_curr);
+
+        // import checkboxes on dashboard
+        fall_checkbox = root.findViewById(R.id.fall_checkbox);
+        impact_checkbox = root.findViewById(R.id.impact_checkbox);
+        inactivity_progress_bar = root.findViewById(R.id.inactivity_progress_bar);
+
 
         // import sensor objects
         mSensorManager = (SensorManager)getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -161,6 +183,45 @@ public class DashboardFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void detectFall() {
+        // If value is below threshold, set low_trigger to stage_cooldown.
+        // Else, reduce by 1 for each cycle.
+        if (acc_curr_val < low_thres) {
+            low_trigger = stage_cooldown;
+        } else {
+            low_trigger = Math.max(0, low_trigger - 1);
+        }
+        fall_checkbox.setChecked(low_trigger > 0);
+    }
+
+    public void detectImpact() {
+        // If value is above threshold and low_trigger not expired, set high_trigger to stage_cooldown.
+        // Else, reduce by 1 for each cycle.
+        if (acc_curr_val > high_thres && low_trigger > 0) {
+            high_trigger = stage_cooldown;
+        } else {
+            high_trigger = Math.max(0, high_trigger - 1);
+        }
+        impact_checkbox.setChecked(high_trigger > 0);
+    }
+
+    public void detectInactivity() {
+        // If high_trigger not expired and inactivity start_time is not set, save current time
+        if (high_trigger > 0 && inactivity_start_time == 0) {
+            inactivity_start_time = System.currentTimeMillis();
+        }
+        // If value is closed to 9.81 (within 1) and inactivity_start_time is set, write to progress bar
+        // Formula: 100 * (time in ms now - inactivity_start_time in ms) / (1000 * inactivity_timer in s)
+        // Else, reset inactivity_start_time and progress bar
+        if (Math.abs(acc_curr_val - 9.81) < 1 && inactivity_start_time > 0) {
+            inactivity_progress_bar.setProgress(((int)(System.currentTimeMillis() - inactivity_start_time))/(10 * inactivity_timer));
+            all_triggered = (int)(System.currentTimeMillis() - inactivity_start_time) > 10 * inactivity_timer;
+        } else {
+            inactivity_start_time = 0;
+            inactivity_progress_bar.setProgress(0);
+        }
     }
 
 }
