@@ -35,7 +35,6 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
 
     // items on dashboard
-    TextView txt_acc, txt_acc_curr;
     CheckBox fall_checkbox, impact_checkbox;
     ProgressBar inactivity_progress_bar;
 
@@ -74,7 +73,7 @@ public class DashboardFragment extends Fragment {
             acc_curr_val = Math.sqrt(x * x + y * y + z * z);
 
             num_datapoints ++;
-            // write to text and append to series
+            // append to series
             series.appendData(new DataPoint(num_datapoints, acc_curr_val), true, num_datapoints);
             low_thres_series.resetData(new DataPoint[] {
                     new DataPoint(series.getLowestValueX(), low_thres),
@@ -84,8 +83,6 @@ public class DashboardFragment extends Fragment {
                     new DataPoint(series.getLowestValueX(), high_thres),
                     new DataPoint(num_datapoints, high_thres)
             });
-            txt_acc.setText("MinX: "+ series.getLowestValueX());
-            txt_acc_curr.setText("Current: " + Math.round( acc_curr_val * Math.pow(10, 3))/ Math.pow(10, 3) );
 
             // reset old data if built-up
             if (series.getLowestValueX() < num_datapoints - 1000) {
@@ -125,10 +122,6 @@ public class DashboardFragment extends Fragment {
 
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        // import text values on dashboard
-        txt_acc = root.findViewById(R.id.txt_acc);
-        txt_acc_curr = root.findViewById(R.id.txt_acc_curr);
 
         // import checkboxes on dashboard
         fall_checkbox = root.findViewById(R.id.fall_checkbox);
