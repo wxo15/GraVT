@@ -6,6 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".ui.settings.SettingsFragment">
 
+    <TextView
+        android:id="@+id/detection_setting"
+        android:layout_width="250dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/detection_setting"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/alert_setting_title"
+        android:layout_width="250dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/alert_setting"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/edit_inactivity_timer"
         android:layout_width="110dp"
@@ -26,7 +50,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
-        android:text="Inactivity Timer (sec)"
+        android:text="@string/inactivity_timer_sec"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -51,7 +75,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
-        android:text="Impact Threshold"
+        android:text="@string/impact_threshold"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -61,13 +85,13 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
-        android:text="Send to Emergency Contact"
+        android:text="@string/send_sms_to"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/alert_setting_title" />
 
     <EditText
         android:id="@+id/edit_low_threshold"
@@ -88,10 +112,28 @@
         android:layout_width="250dp"
         android:layout_height="32dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:text="Fall Threshold"
+        android:layout_marginTop="30dp"
+        android:text="@string/fall_threshold"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detection_setting" />
+
+    <EditText
+        android:id="@+id/emergency_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="phone"
+        app:layout_constraintStart_toStartOf="@+id/send_emergency_contact_switch"
         app:layout_constraintTop_toBottomOf="@+id/send_emergency_contact_switch" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/emergency_phone_number"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

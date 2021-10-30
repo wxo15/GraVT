@@ -2,13 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gravt" >
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_2"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_2_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GraVT" >
+        android:theme="@style/Theme.GraVT">
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"

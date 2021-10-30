@@ -1,5 +1,7 @@
 package com.example.gravt;
 
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -15,6 +17,7 @@ import com.example.gravt.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private static final int SEND_SMS_CODE = 23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,21 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(permsRequestCode, permissions, grantResults);
+        SharedPreferences settings = this.getSharedPreferences("settings", 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        switch (permsRequestCode) {
+            case SEND_SMS_CODE:
+                boolean SMSAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                editor.putBoolean("send_emergency_contact", SMSAccepted);
+                editor.commit();
+
+        }
     }
 
 }

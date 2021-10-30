@@ -1,13 +1,16 @@
 package com.example.gravt.ui.dashboard;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.gravt.R;
@@ -34,6 +39,8 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
 
+
+
     // items on dashboard
     CheckBox fall_checkbox, impact_checkbox;
     ProgressBar inactivity_progress_bar;
@@ -44,6 +51,7 @@ public class DashboardFragment extends Fragment {
     // chart plot variables
     private int num_datapoints = 0;
     private boolean send_emergency_contact;
+    private String emergency_phone_number;
     private int high_thres;
     private int low_thres;
     private int inactivity_timer;
@@ -98,6 +106,10 @@ public class DashboardFragment extends Fragment {
             detectFall();
             detectImpact();
             detectInactivity();
+
+            if (all_triggered == true){
+                permissionCheck();
+            }
 
             // reset axis and background color
             viewport.setMinX(Math.max(0,num_datapoints - 500));
@@ -161,7 +173,14 @@ public class DashboardFragment extends Fragment {
 
         // populate setting based on preferences
         SharedPreferences settings = this.getActivity().getSharedPreferences("settings", 0);
-        send_emergency_contact = settings.getBoolean("send_emergency_contact", false);
+        // if no permission to send SMS, make it false
+        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.SEND_SMS) ==
+                PackageManager.PERMISSION_GRANTED) {
+            send_emergency_contact = settings.getBoolean("send_emergency_contact", false);
+        } else {
+            send_emergency_contact = false;
+        }
+        emergency_phone_number = settings.getString("emergency_phone_number", "999");
         high_thres = settings.getInt("high_thres", 30);
         low_thres = settings.getInt("low_thres", 2);
         inactivity_timer = settings.getInt("inactivity_timer", 10);
@@ -210,11 +229,28 @@ public class DashboardFragment extends Fragment {
         // Else, reset inactivity_start_time and progress bar
         if (Math.abs(acc_curr_val - 9.81) < 1 && inactivity_start_time > 0) {
             inactivity_progress_bar.setProgress(((int)(System.currentTimeMillis() - inactivity_start_time))/(10 * inactivity_timer));
-            all_triggered = (int)(System.currentTimeMillis() - inactivity_start_time) > 10 * inactivity_timer;
+            all_triggered = ((int)(System.currentTimeMillis() - inactivity_start_time)) > 1000 * inactivity_timer;
         } else {
             inactivity_start_time = 0;
             inactivity_progress_bar.setProgress(0);
+            all_triggered = false;
         }
+    }
+
+    private void permissionCheck(){
+        // shouldnt need to check permission anymore as it is checked when user check the emergency contact switch, but just in case
+        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.SEND_SMS) ==
+                PackageManager.PERMISSION_GRANTED && send_emergency_contact == true) {
+            sendSms();
+            all_triggered = false;
+            return;
+        }
+    }
+
+    private void sendSms(){
+        SmsManager sms = SmsManager.getDefault();
+        ArrayList<String> parts = sms.divideMessage("GraVT: Please send help!");
+        sms.sendMultipartTextMessage(emergency_phone_number, null, parts, null,null);
     }
 
 }
