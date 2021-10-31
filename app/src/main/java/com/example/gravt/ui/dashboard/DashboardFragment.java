@@ -242,9 +242,10 @@ public class DashboardFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.SEND_SMS) ==
                 PackageManager.PERMISSION_GRANTED && send_emergency_contact == true) {
             sendSms();
-            all_triggered = false;
-            return;
         }
+        // reset
+        all_triggered = false;
+        inactivity_start_time = 0;
     }
 
     private void sendSms(){
