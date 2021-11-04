@@ -3,6 +3,9 @@ Grandma Velocity Tracker (aka GraVT) is a fall-detection Android app built using
 
 Development is currently in progress.
 
+## Demo
+<kbd>![screenshots](https://github.com/wxo15/GraVT/blob/main/screenshots/demo.gif)</kbd>
+
 
 ## Algorithm
 The app detects 3 major stages in sequence:
